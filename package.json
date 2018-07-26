@@ -1,0 +1,20 @@
+{
+  "name": "dash-assignment",
+  "version": "1.0.0",
+  "description": "This repository has the code that will be used to grade your Dash HTML/CSS assignment. Once you've completed your code on General Assembly's Dash, you'll get a URL for your completed project. You'll submit that completed URL to me via the class website and I will run this code to grade your assignment. You can run this code on your own to verify that you did everything that I expect you to do.",
+  "main": "grade.js",
+  "dependencies": {
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb-base": "^13.0.0",
+    "eslint-plugin-import": "^2.13.0",
+    "prettier": "^1.13.7"
+  },
+  "devDependencies": {
+    "prettier-eslint": "^8.8.2"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "Unlicense"
+}
