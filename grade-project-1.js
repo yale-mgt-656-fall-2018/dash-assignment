@@ -5,20 +5,16 @@ const {
   countElementsCriteria,
 } = require('./helpers.js');
 
-const argv = process.argv.slice(2);
-
-
 
 // Use a map so we can iterate over elements in
 // insertion order. This is important because we
 // might want to terminate early.
 const gradingRubric = new Map();
-gradingRubric.set('siteIsUp', newCriteria('The URL is valid and site is up', 10, true, async (page) => {
-  if (argv.length !== 1) {
+gradingRubric.set('siteIsUp', newCriteria('The URL is valid and site is up', 10, true, async (page, url) => {
+  if (typeof url !== 'string') {
     // Invalid URL
     return 0;
   }
-  const url = argv[0];
   if (url.startsWith('https://dash.generalassemb.ly/') === false) {
     // Invalid URL
     return 0;
@@ -61,7 +57,7 @@ gradingRubric.set('hasSubmitButton', countElementsCriteria('There is one submit 
 gradingRubric.set('hasParagraph', countElementsCriteria('There is one paragraph', 10, false, 1, 'p'));
 gradingRubric.set('hasAnnaImage', countElementsCriteria('There one image of Anna', 10, false, 1, 'img[src$="anna.png"]'));
 
-(async () => {
+const gradeProject1 = async (url) => {
   const browser = await puppeteer.launch({
     args: ['--no-sandbox', '--disable-setuid-sandbox'],
   });
@@ -74,11 +70,15 @@ gradingRubric.set('hasAnnaImage', countElementsCriteria('There one image of Anna
   });
 
   for (const criteria of gradingRubric.values()) {
-    criteria.points = await criteria.grade(page);
+    criteria.points = await criteria.grade(page, url);
     if (criteria.points === 0 && criteria.terminateOnFail) {
       break;
     }
   }
   process.stdout.write(rubricToJSON(gradingRubric));
   browser.close();
-})();
+};
+
+module.exports = {
+  gradeProject1,
+};
