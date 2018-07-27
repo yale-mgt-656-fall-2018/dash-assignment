@@ -1,5 +1,6 @@
 FROM alekzonder/puppeteer:1.1.1
 COPY ./grade-project-1.js /app/grade-project-1.js
+COPY ./grade-project-2.js /app/grade-project-2.js
 COPY ./helpers.js /app/helpers.js
 COPY ./grade.js /app/grade.js
 
