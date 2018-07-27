@@ -16,7 +16,7 @@ gradingRubric.set('hasLikeButtons', countElementsCriteria('There are three like 
 gradingRubric.set('hasParagraph', countElementsCriteria('There are three paragraphs inside articles', 10, false, 3, 'article p'));
 
 
-gradingRubric.set('designIsResponsive', newCriteria('The design is responsive', 10, false, async (page) => {
+gradingRubric.set('designIsResponsive', newCriteria('The design is responsive', 30, false, async (page) => {
   try {
     const getH1FontSize = async () => { /* eslint-env browser */
       const elements = document.getElementsByTagName('h1');
@@ -27,18 +27,17 @@ gradingRubric.set('designIsResponsive', newCriteria('The design is responsive', 
       const fontSize = style.getPropertyValue('font-size');
       return fontSize;
     };
-    const bigFontSize = await getH1FontSize();
+    const bigFontSize = await page.evaluate(getH1FontSize);
     await page.setViewport({
       width: 400,
       height: 800,
     });
-    const littleFontSize = await getH1FontSize();
+    const littleFontSize = await page.evaluate(getH1FontSize);
     if (littleFontSize < bigFontSize) {
       return 10;
     }
     return 0;
   } catch (error) {
-    console.log(`Caught error ${error}`);
     return 0;
   }
 }));
