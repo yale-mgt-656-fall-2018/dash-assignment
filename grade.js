@@ -15,16 +15,37 @@ function newCriteria(title, pointsPossible, terminateOnFail, gradingFunction) {
 
 function rubricToObject(rubric) {
   const rubricObject = {};
+  let index = 0;
   for (const [key, value] of rubric) {
     rubricObject[key] = {
       points: value.points,
       pointsPossible: value.pointsPossible,
       title: value.title,
+      order: index,
     };
+    index += 1;
   }
   return rubricObject;
 }
 const rubricToJSON = (rubric) => JSON.stringify(rubricToObject(rubric));
+
+function countElementsCriteria(title, pointsPossible, terminateOnFail,
+  elementCountExpected, selector) {
+  return newCriteria(title, pointsPossible, terminateOnFail, async (page) => {
+    try {
+      const elementCount = await page.evaluate((localSelector) => { /* eslint-env browser */
+        const foundElements = document.querySelectorAll(localSelector);
+        return foundElements.length;
+      }, selector);
+      if (elementCount === elementCountExpected) {
+        return pointsPossible;
+      }
+    } catch (error) {
+      return 0;
+    }
+    return 0;
+  });
+}
 
 // Use a map so we can iterate over elements in
 // insertion order. This is important because we
@@ -33,17 +54,14 @@ const gradingRubric = new Map();
 gradingRubric.set('siteIsUp', newCriteria('The URL is valid and site is up', 10, true, async (page) => {
   if (argv.length !== 1) {
     // Invalid URL
-    console.log('wrong number of arguments');
     return 0;
   }
   const url = argv[0];
   if (url.startsWith('https://dash.generalassemb.ly/') === false) {
     // Invalid URL
-    console.log('bad url prefix');
     return 0;
   }
   if (url.endsWith('build-your-own-personal-website') === false) {
-    console.log('bad url ending');
     // Invalid URL
     return 0;
   }
@@ -77,6 +95,10 @@ gradingRubric.set('inputFieldsHaveRightStyle', newCriteria('The input fields hav
   return 0;
 }));
 
+gradingRubric.set('hasSubmitButton', countElementsCriteria('There is one submit button', 10, false, 1, 'input[type="submit"]'));
+gradingRubric.set('hasParagraph', countElementsCriteria('There is one paragraph', 10, false, 1, 'p'));
+gradingRubric.set('hasAnnaImage', countElementsCriteria('There one image of Anna', 10, false, 1, 'img[src$="anna.png"]'));
+
 (async () => {
   const browser = await puppeteer.launch({
     args: ['--no-sandbox', '--disable-setuid-sandbox'],
@@ -89,15 +111,12 @@ gradingRubric.set('inputFieldsHaveRightStyle', newCriteria('The input fields hav
     waitUntil: 'networkidle2',
   });
 
-  for (const [key, criteria] of gradingRubric) {
+  for (const criteria of gradingRubric.values()) {
     criteria.points = await criteria.grade(page);
-    console.log(key);
     if (criteria.points === 0 && criteria.terminateOnFail) {
       break;
     }
   }
-  console.log(argv);
-  console.log('woooot');
-  console.log(rubricToJSON(gradingRubric));
+  process.stdout.write(rubricToJSON(gradingRubric));
   browser.close();
 })();
