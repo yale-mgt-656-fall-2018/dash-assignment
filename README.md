@@ -10,7 +10,7 @@ expect you to do.
 
 ## Running the grading code (for students)
 
-You will need to install [Docker](https://www.docker.com/) first. You'll likely
+You will need to install [Docker](https://store.docker.com/search?type=edition&offering=community) first. You'll likely
 want the "Community Edition". Once you have that, you can pull down one of the
 latest Docker [images of the grading code from Docker Hub](https://hub.docker.com/r/mgt656fall2018/dash-assignment/).
 
