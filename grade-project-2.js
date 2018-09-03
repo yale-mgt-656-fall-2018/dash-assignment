@@ -16,7 +16,7 @@ gradingRubric.set('hasLikeButtons', countElementsCriteria('There are three like 
 gradingRubric.set('hasParagraph', countElementsCriteria('There are three paragraphs inside articles', 10, false, 3, 'article p'));
 
 
-gradingRubric.set('designIsResponsive', newCriteria('The design is responsive', 30, false, async (page) => {
+gradingRubric.set('designIsResponsive', newCriteria('The design is responsive', 10, false, async (page) => {
   try {
     const getH1FontSize = async () => { /* eslint-env browser */
       const elements = document.getElementsByTagName('h1');
