@@ -25,7 +25,12 @@ function rubricToObject(rubric) {
   }
   return rubricObject;
 }
-const rubricToJSON = (rubric) => JSON.stringify(rubricToObject(rubric));
+
+const rubricToJSON = (rubric) => {
+  const tabSize = 4;
+  // pretty-print JSON string to improve readibility
+  return JSON.stringify(rubricToObject(rubric), null, tabSize);
+};
 
 function countElementsCriteria(title, pointsPossible, terminateOnFail,
   elementCountExpected, selector) {
