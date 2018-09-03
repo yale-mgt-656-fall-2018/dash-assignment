@@ -32,6 +32,16 @@ const rubricToJSON = (rubric) => {
   return JSON.stringify(rubricToObject(rubric), null, tabSize);
 };
 
+const totalPoints = (rubric) => {
+  var totalPointsEarned = 0;
+  var totalPointsPossible = 0;
+  for (const [key, value] of rubric) {
+    totalPointsEarned += value.points;
+    totalPointsPossible += value.pointsPossible;
+  }
+  return "\nFinal Score: " + totalPointsEarned + "/" + totalPointsPossible + " points.\n";
+}
+
 function countElementsCriteria(title, pointsPossible, terminateOnFail,
   elementCountExpected, selector) {
   return newCriteria(title, pointsPossible, terminateOnFail, async (page) => {
@@ -94,6 +104,7 @@ const gradeProject = async (rubric, url) => {
     }
   }
   process.stdout.write(rubricToJSON(rubric));
+  process.stdout.write(totalPoints(rubric));
   browser.close();
 };
 
