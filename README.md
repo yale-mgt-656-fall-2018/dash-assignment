@@ -26,6 +26,8 @@ docker run mgt656fall2018/dash-assignment project-2 'https://dash.generalassemb.
 The URLs shown in the commands above are given to you when you complete "Project 1" and
 "Project 2" on dash. This grading code ensures that you completed those to our satisfaction.
 
+If you run with the flag '--final-score', it will print out your total score added up at the end compaired to the total possible score.
+
 By default, when you run `docker pull`, it will get the latest version of the code. You
 can also pull down specific tags/releases, e.g. "v1.2", or "v2.1". We use semantic
 versioning for all grading code---a major release indicates changes that will affect
