@@ -9,7 +9,7 @@ const argv = process.argv.slice(2);
 
 
 (async () => {
-  if (argv.length !== 2) {
+  if (argv.length < 2) {
     process.stderr.write('Wrong number of arguments\n');
     return;
   }

@@ -104,7 +104,9 @@ const gradeProject = async (rubric, url) => {
     }
   }
   process.stdout.write(rubricToJSON(rubric));
-  process.stdout.write(totalPoints(rubric));
+  if (process.argv.slice(2).indexOf('--final-score') > -1) {
+    process.stdout.write(totalPoints(rubric)); 
+  }
   browser.close();
 };
 
