@@ -34,20 +34,26 @@ const rubricToJSON = (rubric) => {
 };
 
 const totalPoints = (rubric) => {
-  var totalPointsEarned = 0;
-  var totalPointsPossible = 0;
+  let totalPointsEarned = 0;
+  let totalPointsPossible = 0;
   for (const [key, value] of rubric) {
     totalPointsEarned += value.points;
     totalPointsPossible += value.pointsPossible;
   }
-  return "\nFinal Score: " + totalPointsEarned + "/" + totalPointsPossible + " points.\n";
-}
+  return `\nFinal Score: ${totalPointsEarned}/${totalPointsPossible} points.\n`;
+};
 
-function countElementsCriteria(title, pointsPossible, terminateOnFail,
-  elementCountExpected, selector) {
+function countElementsCriteria(
+  title,
+  pointsPossible,
+  terminateOnFail,
+  elementCountExpected,
+  selector,
+) {
   return newCriteria(title, pointsPossible, terminateOnFail, async (page) => {
     try {
-      const elementCount = await page.evaluate((localSelector) => { /* eslint-env browser */
+      const elementCount = await page.evaluate((localSelector) => {
+        /* eslint-env browser */
         const foundElements = document.querySelectorAll(localSelector);
         return foundElements.length;
       }, selector);
@@ -72,6 +78,7 @@ function checkDashURL(expectedSuffix) {
     if (validDomains.includes(parsedURL.host) === false) {
       return 0;
     }
+
     if (url.endsWith(expectedSuffix) === false) {
       // Invalid URL
       return 0;
@@ -97,7 +104,7 @@ const gradeProject = async (rubric, url) => {
   const page = await browser.newPage();
   // Uncomment to see console.log statements in the Chrome client.
   // eslint-disable-next-line no-underscore-dangle, no-console
-  page.on('console', consoleObj => console.log(consoleObj._text));
+  page.on('console', (consoleObj) => console.log(consoleObj._text));
 
   for (const criteria of rubric.values()) {
     criteria.points = await criteria.grade(page, url);
@@ -107,7 +114,7 @@ const gradeProject = async (rubric, url) => {
   }
   process.stdout.write(rubricToJSON(rubric));
   if (process.argv.slice(2).indexOf('--final-score') > -1) {
-    process.stdout.write(totalPoints(rubric)); 
+    process.stdout.write(totalPoints(rubric));
   }
   browser.close();
 };
