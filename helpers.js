@@ -66,7 +66,7 @@ function checkDashURL(expectedSuffix) {
       // Invalid URL
       return 0;
     }
-    if (url.startsWith('https://dash.generalassemb.ly/') === false) {
+    if (url.startsWith('*://dash.generalassemb.ly/') === false && url.startsWith('*://dash.ga.co/' === false)) {
       // Invalid URL
       return 0;
     }
