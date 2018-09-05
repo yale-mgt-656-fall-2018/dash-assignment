@@ -1,4 +1,5 @@
 const puppeteer = require('puppeteer');
+const nodeURL = require('url');
 
 function newCriteria(title, pointsPossible, terminateOnFail, gradingFunction) {
   const thisCriteria = {
@@ -66,8 +67,9 @@ function checkDashURL(expectedSuffix) {
       // Invalid URL
       return 0;
     }
-    if (url.startsWith('*://dash.generalassemb.ly/') === false && url.startsWith('*://dash.ga.co/' === false)) {
-      // Invalid URL
+    const parsedURL = new nodeURL.URL(url);
+    const validDomains = ['dash.ga.co', 'dash.generalassemb.ly'];
+    if (validDomains.includes(parsedURL.host) === false) {
       return 0;
     }
     if (url.endsWith(expectedSuffix) === false) {
