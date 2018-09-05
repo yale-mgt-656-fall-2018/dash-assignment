@@ -34,7 +34,7 @@ gradingRubric.set('designIsResponsive', newCriteria('The design is responsive', 
     });
     const littleFontSize = await page.evaluate(getH1FontSize);
     if (littleFontSize < bigFontSize) {
-      return 10;
+      return 30;
     }
     return 0;
   } catch (error) {
